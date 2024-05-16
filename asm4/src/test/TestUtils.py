@@ -196,9 +196,7 @@ class TestCodeGen():
             subprocess.call("java  -jar " + JASMIN_JAR + " " + path +
                             "/ZCodeClass.j", shell=True, stderr=subprocess.STDOUT)
 
-            # subprocess.run("java -cp ./lib:. ZCodeClass",
-            #                shell=True, stdout=f, timeout=10)
-            subprocess.run("java -cp . ZCodeClass",
+            subprocess.run("java -cp ./lib:. ZCodeClass",
                            shell=True, stdout=f, timeout=10)
         except StaticError as e:
             f.write(str(e))

@@ -39,7 +39,7 @@ class Symbol:
 
 class CodeGenerator:
     def __init__(self):
-        self.libName = "ZCodeClass"
+        self.libName = "io"
 
     def init(self):
         return [
@@ -56,7 +56,7 @@ class CodeGenerator:
         # dir_: String
 
         gl = self.init()
-        gc = CodeGenVisitor(ast, gl, path, self.libName)
+        gc = CodeGenVisitor(ast, gl, path)
         gc.visit(ast, None)
 
 
@@ -75,12 +75,12 @@ class Access():
 
 
 class CodeGenVisitor(BaseVisitor):
-    def __init__(self, astTree, env: list[Symbol], path: str, libName: str):
+    def __init__(self, astTree, env: list[Symbol], path: str):
         self.astTree = astTree
         self.env = [env]
         self.path = path
         self.emit = Emitter(path)
-        self.libName = libName
+        self.libName = 'ZCodeClass'
         self.global_var = {}
         self.global_func = {}
         self.clinit = {}
@@ -123,95 +123,8 @@ class CodeGenVisitor(BaseVisitor):
             if code:
                 self.emit.printout(code)
 
-        # IO functions
-        self.emit.printout('''
-.method public static writeNumber(F)V
-  .limit stack 2
-  .limit locals 1
-  .line 5
-  0: getstatic java/lang/System/out Ljava/io/PrintStream;
-  3: fload_0
-  4: invokevirtual java/io/PrintStream/print(F)V
-  .line 6
-  7: return
-.end method
-
-.method public static writeString(Ljava/lang/String;)V
-  .limit stack 2
-  .limit locals 1
-  .line 9
-  0: getstatic java/lang/System/out Ljava/io/PrintStream;
-  3: aload_0
-  4: invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V
-  .line 10
-  7: return
-.end method
-
-.method public static writeBool(Z)V
-  .limit stack 2
-  .limit locals 1
-  .line 13
-  0: getstatic java/lang/System/out Ljava/io/PrintStream;
-  3: iload_0
-  4: invokevirtual java/io/PrintStream/print(Z)V
-  .line 14
-  7: return
-.end method
-
-.method public static readNumber()F
-  .limit stack 3
-  .limit locals 2
-  .line 17
-  0: new java/util/Scanner
-  3: dup
-  4: getstatic java/lang/System/in Ljava/io/InputStream;
-  7: invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
-  10: astore_0
-  .line 18
-  11: aload_0
-  12: invokevirtual java/util/Scanner/nextFloat()F
-  15: fstore_1
-  .line 19
-  16: fload_1
-  17: freturn
-.end method
-
-.method public static readString()Ljava/lang/String;
-  .limit stack 3
-  .limit locals 2
-  .line 23
-  0: new java/util/Scanner
-  3: dup
-  4: getstatic java/lang/System/in Ljava/io/InputStream;
-  7: invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
-  10: astore_0
-  .line 24
-  11: aload_0
-  12: invokevirtual java/util/Scanner/nextLine()Ljava/lang/String;
-  15: astore_1
-  .line 25
-  16: aload_1
-  17: areturn
-.end method
-
-.method public static readBool()Z
-  .limit stack 3
-  .limit locals 2
-  .line 29
-  0: new java/util/Scanner
-  3: dup
-  4: getstatic java/lang/System/in Ljava/io/InputStream;
-  7: invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V
-  10: astore_0
-  .line 30
-  11: aload_0
-  12: invokevirtual java/util/Scanner/nextBoolean()Z
-  15: istore_1
-  .line 31
-  16: iload_1
-  17: ireturn
-.end method
-                           
+        self.emit.printout('''  
+                                                    
 .method public static concatString(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
   .limit stack 2
   .limit locals 3
